@@ -17,12 +17,27 @@ def soucin(a, b):
 
 @app.route("/", methods = ['GET', 'POST'])
 def kalkulacka():
-    prvni_cislo = request.args.get("prvni_cislo")
-    druhe_cislo = request.args.get("druhe_cislo")
-    operator = request.args.get("operator")
+    prvni_cislo = request.form.get("prvni_cislo")
+    druhe_cislo = request.form.get("druhe_cislo")
+    operator = request.form.get("operator")
 
-    if prvni_cislo si None or druhe_cislo is None:
-        return render 
+    if prvni_cislo is None or druhe_cislo is None:
+        return render template("template.html", vysledek="Vyplň formulář")
+    if float(druhe_cislo) ==0 and operator == "/":
+        vysledek="Nelze dělit nulou"
+        return render template("template.html", vysledek=vysledek)
+    if (operator=="+"):
+        vysledek = secti(prvni_cislo, druhe_cislo)
+    elif (operator=="-"):
+        vysledek = odecti(prvni_cislo, druhe_cislo)
+    elif (operator=="/"):
+        vysledek = podil(prvni_cislo, druhe_cislo)
+    elif (operator=="*"):
+        vysledek = soucin(prvni_cislo, druhe_cislo)
+    else:
+        vysledek = "Chyba!"
+
+    return render template("kalkulacka.html", vysledek = vysledek)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
